@@ -161,7 +161,7 @@ schedule_df = pd.DataFrame(schedule_data)
 
 # Display the table in Streamlit
 st.write("## Final Optimal Schedule")
-st.dataframe(schedule_df)
+st.table(schedule_df)
 
 # Display the total ratings
 #st.write("### Total Ratings:")
