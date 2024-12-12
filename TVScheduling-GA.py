@@ -145,14 +145,30 @@ def genetic_algorithm(initial_schedule, generations=GEN, population_size=POP, cr
 
 # brute force
 initial_best_schedule = finding_best_schedule(all_possible_schedules)
-
 rem_t_slots = len(all_time_slots) - len(initial_best_schedule)
 genetic_schedule = genetic_algorithm(initial_best_schedule, generations=GEN, population_size=POP, elitism_size=EL_S)
-
 final_schedule = initial_best_schedule + genetic_schedule[:rem_t_slots]
 
-st.write("\nFinal Optimal Schedule:")
-for time_slot, program in enumerate(final_schedule):
-    st.write(f"Time Slot {all_time_slots[time_slot]:02d}:00 - Program {program}")
+# Prepare data for the table
+schedule_data = {
+    "Time Slot": [f"{time_slot:02d}:00" for time_slot in all_time_slots],
+    "Program": final_schedule
+}
 
-st.write("Total Ratings:", fitness_function(final_schedule))
+# Convert to DataFrame
+schedule_df = pd.DataFrame(schedule_data)
+
+# Display the table in Streamlit
+st.write("## Final Optimal Schedule")
+st.table(schedule_df)
+
+# Display the total ratings
+st.write("### Total Ratings:")
+st.write(fitness_function(final_schedule))
+
+
+#st.write("\nFinal Optimal Schedule:")
+#for time_slot, program in enumerate(final_schedule):
+#    st.write(f"Time Slot {all_time_slots[time_slot]:02d}:00 - Program {program}")
+
+#st.write("Total Ratings:", fitness_function(final_schedule))
