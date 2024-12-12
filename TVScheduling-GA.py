@@ -1,6 +1,7 @@
 import csv
 import streamlit as st
 import pandas as pd
+import random
 
 # Function to read the CSV file and convert it to the desired format
 def read_csv_to_dict(file_path):
@@ -144,6 +145,16 @@ def genetic_algorithm(initial_schedule, generations=GEN, population_size=POP, cr
 
 ##################################################### RESULTS ###################################################################################
 
+# Allow the user to input genetic algorithm parameters
+st.sidebar.header("Genetic Algorithm Parameters")
+CO_R = st.sidebar.slider("Crossover Rate (CO_R)", min_value=0.0, max_value=1.0, value=0.8, step=0.1)
+MUT_R = st.sidebar.slider("Mutation Rate (MUT_R)", min_value=0.0, max_value=1.0, value=0.2, step=0.1)
+
+# Display current parameter values
+st.sidebar.write("### Selected Parameters")
+st.sidebar.write(f"Crossover Rate: {CO_R}")
+st.sidebar.write(f"Mutation Rate: {MUT_R}")
+
 # brute force
 initial_best_schedule = finding_best_schedule(all_possible_schedules)
 rem_t_slots = len(all_time_slots) - len(initial_best_schedule)
@@ -163,16 +174,8 @@ schedule_df = pd.DataFrame(schedule_data)
 st.write("## Final Optimal Schedule")
 st.table(schedule_df)
 
-# Display the total ratings
-#st.write("### Total Ratings:")
-#st.write(fitness_function(final_schedule))
 
 st.write("### Total Ratings:")
 st.write(round(fitness_function(final_schedule), 4))
 
 
-#st.write("\nFinal Optimal Schedule:")
-#for time_slot, program in enumerate(final_schedule):
-#    st.write(f"Time Slot {all_time_slots[time_slot]:02d}:00 - Program {program}")
-
-#st.write("Total Ratings:", fitness_function(final_schedule))
