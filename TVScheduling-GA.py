@@ -145,15 +145,15 @@ def genetic_algorithm(initial_schedule, generations=GEN, population_size=POP, cr
 
 ##################################################### RESULTS ###################################################################################
 
-# Allow the user to input genetic algorithm parameters
-st.sidebar.header("Genetic Algorithm Parameters")
-CO_R = st.sidebar.slider("Crossover Rate (CO_R)", min_value=0.0, max_value=1.0, value=0.8, step=0.1)
-MUT_R = st.sidebar.slider("Mutation Rate (MUT_R)", min_value=0.0, max_value=1.0, value=0.2, step=0.1)
+# Input fields for genetic algorithm parameters
+st.write("## Genetic Algorithm Parameters")
+CO_R = st.slider("Crossover Rate (CO_R)", min_value=0.0, max_value=1.0, value=0.8, step=0.1)
+MUT_R = st.slider("Mutation Rate (MUT_R)", min_value=0.0, max_value=1.0, value=0.2, step=0.1)
 
 # Display current parameter values
-st.sidebar.write("### Selected Parameters")
-st.sidebar.write(f"Crossover Rate: {CO_R}")
-st.sidebar.write(f"Mutation Rate: {MUT_R}")
+st.write("### Selected Parameters")
+st.write(f"- Crossover Rate: {CO_R}")
+st.write(f"- Mutation Rate: {MUT_R}")
 
 # brute force
 initial_best_schedule = finding_best_schedule(all_possible_schedules)
