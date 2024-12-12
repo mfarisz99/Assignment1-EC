@@ -164,8 +164,11 @@ st.write("## Final Optimal Schedule")
 st.table(schedule_df)
 
 # Display the total ratings
+#st.write("### Total Ratings:")
+#st.write(fitness_function(final_schedule))
+
 st.write("### Total Ratings:")
-st.write(fitness_function(final_schedule))
+st.write(round(fitness_function(final_schedule), 4))
 
 
 #st.write("\nFinal Optimal Schedule:")
