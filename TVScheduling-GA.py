@@ -168,7 +168,7 @@ st.table(schedule_df)
 #st.write(fitness_function(final_schedule))
 
 st.write("### Total Ratings:")
-st.write(round(fitness_function(final_schedule), 2))
+st.write(round(fitness_function(final_schedule), 4))
 
 
 #st.write("\nFinal Optimal Schedule:")
