@@ -145,71 +145,50 @@ def genetic_algorithm(initial_schedule, generations=GEN, population_size=POP, cr
 
 ##################################################### RESULTS ###################################################################################
 
-# Header for Genetic Algorithm Parameters
+# Input fields for genetic algorithm parameters with updated ranges and discrete tick marks
 st.write("## Genetic Algorithm Parameters")
-# Create a form for user inputs
-st.write("## Genetic Algorithm Parameters")
-with st.form("parameters_form"):
-    # Sliders for input
-    CO_R = st.slider(
-        "Crossover Rate (CO_R)", 
-        min_value=0.0, 
-        max_value=0.95, 
-        value=0.8, 
-        step=0.05, 
-        format="%.2f"
-    )
-    MUT_R = st.slider(
-        "Mutation Rate (MUT_R)", 
-        min_value=0.01, 
-        max_value=0.05, 
-        value=0.02, 
-        step=0.01, 
-        format="%.2f"
-    )
-    
-    # Submit button
-    submitted = st.form_submit_button("Submit")
+CO_R = st.slider(
+    "Crossover Rate (CO_R)", 
+    min_value=0.0, 
+    max_value=0.95, 
+    value=0.8, 
+    step=0.05,  # Set step to 0.05 for discrete options
+    format="%.2f"  # Show two decimal places
+)
+MUT_R = st.slider(
+    "Mutation Rate (MUT_R)", 
+    min_value=0.01, 
+    max_value=0.05, 
+    value=0.02, 
+    step=0.01,  # Set step to 0.01 for discrete options
+    format="%.2f"  # Show two decimal places
+)
 
-if submitted:
-    st.write("### Selected Parameters")
-    st.write(f"- Crossover Rate: {CO_R}")
-    st.write(f"- Mutation Rate: {MUT_R}")
+# Display current parameter values
+st.write("### Selected Parameters")
+st.write(f"- Crossover Rate: {CO_R}")
+st.write(f"- Mutation Rate: {MUT_R}")
 
-    # Generate the final optimal schedule using the selected parameters
-    try:
-        initial_best_schedule = finding_best_schedule(all_possible_schedules)
-        rem_t_slots = len(all_time_slots) - len(initial_best_schedule)
-        genetic_schedule = genetic_algorithm(
-            initial_best_schedule, 
-            generations=GEN, 
-            population_size=POP, 
-            crossover_rate=CO_R, 
-            mutation_rate=MUT_R, 
-            elitism_size=EL_S
-        )
-        final_schedule = initial_best_schedule + genetic_schedule[:rem_t_slots]
+# brute force
+initial_best_schedule = finding_best_schedule(all_possible_schedules)
+rem_t_slots = len(all_time_slots) - len(initial_best_schedule)
+genetic_schedule = genetic_algorithm(initial_best_schedule, generations=GEN, population_size=POP, elitism_size=EL_S)
+final_schedule = initial_best_schedule + genetic_schedule[:rem_t_slots]
 
-        # Debug: Check lengths
-        if len(final_schedule) != len(all_time_slots):
-            st.error("Error: Mismatch between time slots and the generated schedule.")
-            st.write(f"Time Slots: {len(all_time_slots)}, Schedule: {len(final_schedule)}")
-        else:
-            # Prepare data for the table
-            schedule_data = {
-                "Time Slot": [f"{time_slot:02d}:00" for time_slot in all_time_slots],
-                "Program": final_schedule
-            }
+# Prepare data for the table
+schedule_data = {
+    "Time Slot": [f"{time_slot:02d}:00" for time_slot in all_time_slots],
+    "Program": final_schedule
+}
 
-            # Convert to DataFrame
-            schedule_df = pd.DataFrame(schedule_data)
+# Convert to DataFrame
+schedule_df = pd.DataFrame(schedule_data)
 
-            # Display the table in Streamlit
-            st.write("## Final Optimal Schedule")
-            st.dataframe(schedule_df, use_container_width=True)  # Interactive, scrollable table
+# Display the table in Streamlit
+st.write("## Final Optimal Schedule")
+st.table(schedule_df)
 
-            # Display the total ratings
-            st.write("### Total Ratings:")
-            st.write(fitness_function(final_schedule))
-    except Exception as e:
-        st.error(f"An error occurred: {str(e)}")
+
+st.write("### Total Ratings:")
+st.write(round(fitness_function(final_schedule), 4))
+
