@@ -171,14 +171,12 @@ with st.form("parameters_form"):
     # Submit button
     submitted = st.form_submit_button("Submit")
 
-# Process only if the form is submitted
 if submitted:
     st.write("### Selected Parameters")
     st.write(f"- Crossover Rate: {CO_R}")
     st.write(f"- Mutation Rate: {MUT_R}")
 
     # Generate the final optimal schedule using the selected parameters
-   # Generate the final optimal schedule using the selected parameters
     try:
         initial_best_schedule = finding_best_schedule(all_possible_schedules)
         rem_t_slots = len(all_time_slots) - len(initial_best_schedule)
@@ -208,11 +206,10 @@ if submitted:
 
             # Display the table in Streamlit
             st.write("## Final Optimal Schedule")
-            st.table(schedule_df)
+            st.dataframe(schedule_df, use_container_width=True)  # Interactive, scrollable table
 
             # Display the total ratings
             st.write("### Total Ratings:")
             st.write(fitness_function(final_schedule))
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
-
