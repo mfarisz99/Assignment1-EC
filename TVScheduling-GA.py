@@ -147,8 +147,8 @@ def genetic_algorithm(initial_schedule, generations=GEN, population_size=POP, cr
 
 # Input fields for genetic algorithm parameters
 st.write("## Genetic Algorithm Parameters")
-CO_R = st.slider("Crossover Rate (CO_R)", min_value=0.0, max_value=1.0, value=0.8, step=0.1)
-MUT_R = st.slider("Mutation Rate (MUT_R)", min_value=0.0, max_value=1.0, value=0.2, step=0.1)
+CO_R = st.slider("Crossover Rate (CO_R)", min_value=0.0, max_value=0.95, value=0.8, step=0.1)
+MUT_R = st.slider("Mutation Rate (MUT_R)", min_value=0.01, max_value=0.05, value=0.2, step=0.1)
 
 # Display current parameter values
 st.write("### Selected Parameters")
