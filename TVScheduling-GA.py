@@ -178,33 +178,41 @@ if submitted:
     st.write(f"- Mutation Rate: {MUT_R}")
 
     # Generate the final optimal schedule using the selected parameters
-    initial_best_schedule = finding_best_schedule(all_possible_schedules)
-    rem_t_slots = len(all_time_slots) - len(initial_best_schedule)
-    genetic_schedule = genetic_algorithm(
-        initial_best_schedule, 
-        generations=GEN, 
-        population_size=POP, 
-        crossover_rate=CO_R, 
-        mutation_rate=MUT_R, 
-        elitism_size=EL_S
-    )
-    final_schedule = initial_best_schedule + genetic_schedule[:rem_t_slots]
+   # Generate the final optimal schedule using the selected parameters
+    try:
+        initial_best_schedule = finding_best_schedule(all_possible_schedules)
+        rem_t_slots = len(all_time_slots) - len(initial_best_schedule)
+        genetic_schedule = genetic_algorithm(
+            initial_best_schedule, 
+            generations=GEN, 
+            population_size=POP, 
+            crossover_rate=CO_R, 
+            mutation_rate=MUT_R, 
+            elitism_size=EL_S
+        )
+        final_schedule = initial_best_schedule + genetic_schedule[:rem_t_slots]
 
-    # Prepare data for the table
-    schedule_data = {
-        "Time Slot": [f"{time_slot:02d}:00" for time_slot in all_time_slots],
-        "Program": final_schedule
-    }
+        # Debug: Check lengths
+        if len(final_schedule) != len(all_time_slots):
+            st.error("Error: Mismatch between time slots and the generated schedule.")
+            st.write(f"Time Slots: {len(all_time_slots)}, Schedule: {len(final_schedule)}")
+        else:
+            # Prepare data for the table
+            schedule_data = {
+                "Time Slot": [f"{time_slot:02d}:00" for time_slot in all_time_slots],
+                "Program": final_schedule
+            }
 
-# Convert to DataFrame
-schedule_df = pd.DataFrame(schedule_data)
+            # Convert to DataFrame
+            schedule_df = pd.DataFrame(schedule_data)
 
-# Display the table in Streamlit
-st.write("## Final Optimal Schedule")
-st.table(schedule_df)
+            # Display the table in Streamlit
+            st.write("## Final Optimal Schedule")
+            st.table(schedule_df)
 
-
-st.write("### Total Ratings:")
-st.write(round(fitness_function(final_schedule), 4))
-
+            # Display the total ratings
+            st.write("### Total Ratings:")
+            st.write(fitness_function(final_schedule))
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
 
